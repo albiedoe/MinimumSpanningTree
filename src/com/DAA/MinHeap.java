@@ -2,15 +2,20 @@ package com.DAA;
 
 public class MinHeap implements MinHeapInterface {
 
-	private Vertex[] elements;
+	private int[] heap;
+	private int[] vertices;
 	private int numItems = 0;
 	
 	public MinHeap(int size){
-		elements = new Vertex[size];
+		heap = new int[size];
+		vertices = new int[size];
+		for(int i = 0; i<size; i++){
+			vertices[i]=i;
+		}
 	}
 
 	public boolean isEmpty() {
-		if(elements[0] == null){
+		if(numItems == 0){
 			return true;
 		}
 		else{
@@ -18,18 +23,19 @@ public class MinHeap implements MinHeapInterface {
 		}
 	}
 
-	public int insert(Object item) {
-		elements[numItems] = (Vertex) item;
-		return numItems++;
+	public boolean insert(Object item) {
+		heap[numItems++] = (int) item;
+
+		return true;
 	}
 
 
 	public Object DeleteMin() throws EmptyMinHeapException{
 		
 		//save first element to return later
-		Vertex v = elements[0];
+		int num = heap[0];
 		//move last element to first
-		elements[0] = elements[numItems-1];
+		heap[0] = heap[numItems-1];
 		//delete new last
 		numItems--;
 		
@@ -51,7 +57,7 @@ public class MinHeap implements MinHeapInterface {
 				}
 			}
 			else{
-				if(elements[2*index +1].getDistance() < elements[2*index +2].getDistance()){
+				if(heap[2*index +1] < heap[2*index +2]){
 					swappingIndex = 2*index +1;
 				}
 				else{
@@ -60,7 +66,7 @@ public class MinHeap implements MinHeapInterface {
 			}
 
 			if(swappingIndex!=-1){
-				if(elements[index].getDistance()> elements[swappingIndex].getDistance()){
+				if(heap[index]> heap[swappingIndex]){
 					//swap
 					swap(index, swappingIndex);
 				}
@@ -71,34 +77,37 @@ public class MinHeap implements MinHeapInterface {
 			}
 
 		}
-		numItems--;
-		return elements[index];
+
+		return num;
 	}
 
 	
-	public int decreaseKey(int index, int value) {
-		//go through array until numItems, look for index == id,
+	public boolean decreaseKey(int index, int value) {
+
+		boolean result = false;
 		//change value of distance, bubble up
-		for(int i =0; i<numItems;i++){
-			if(elements[i].getId()==index){
-				//we found our index
-				elements[i].setDistance(value);
-				//now bubble up
-				while(elements[i/2].getDistance()<elements[i].getDistance()){
-					//swap them
-					swap(i/2, i);
-					i = i/2;
-				}
-				return i;
-			}
+		int vertexsIndex = vertices[index];
+		heap[vertexsIndex] = value;
+
+		//now bubble up
+		while(heap[vertexsIndex/2]<heap[vertexsIndex]){
+				//swap them
+				swap(vertexsIndex/2, vertexsIndex);
+				vertexsIndex = vertexsIndex/2;
+				result = true;
 		}
-		return -1;
+	
+		return result;
 	}
 
 	private void swap(int index1, int index2){
-		Vertex temp = elements[index1];
-		elements[index1] = elements[index2];
-		elements[index2]= temp;
+		int temp = heap[index1];
+		heap[index1] = heap[index2];
+		heap[index2]= temp;
 		index1 = index2;
+	}
+	
+	public int getValue(int vertex){
+		return heap[vertices[vertex]];
 	}
 }

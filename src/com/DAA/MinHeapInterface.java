@@ -1,18 +1,21 @@
 package com.DAA;
 
 public interface MinHeapInterface {
-
-	
+	//this is a specialized MinHeap to be used by Prim's or Dijkstra's algos
+	   
 	public boolean isEmpty();
 	// returns true if MinHeap is empty, false otherwise
 
-	public int insert(Object item);
-	//inserts object in MinHeap and returns index in the array where it ended up
+	public boolean insert(Object item);
+	//inserts object in MinHeap and returns outcome
 
 	public Object DeleteMin();
-	//returns true if min was removed successfully, false otherwise
+	//returns reference to object that has been removed 
 
-	public int decreaseKey(int idex, int value);
-	//decreases to value the priority of the item in the specified index and returns the index in the array where the item ended up
+	public boolean decreaseKey(int vertex, int value);
+	//decreases to value the priority of the specified vertex and returns the outcome
 
-}
+	public int getValue(int vertex);
+	//returns the value in the MinHeap of the specified vertex
+
+	}// end MinHeapInterface

@@ -8,12 +8,13 @@ public class Driver {
 
 	private static BufferedReader reader = new BufferedReader(
 			new InputStreamReader(System.in));
+	private static MinHeap minHeap = new MinHeap(10);
 	
-	public static void main(String[] args) {
-        initialize(args);
+	public static void main(String[] args) throws IOException{
+        //initialize(args);
 
         String choice = "";
-        while (choice.equals("8") != true) {
+        while (choice.equals("6") != true) {
             displayMenu();
             choice = reader.readLine();
             System.out.println(choice);
@@ -30,10 +31,10 @@ public class Driver {
 	    throws IOException {
 	        switch (menuOptionSelected) {
 	        case "1":
-	            customerEntersLine();
+	            minHeapIsEmpty();
 	            break;
 	        case "2":
-	            customerEntersTheater();
+	            insertKey();
 	            break;
 	        case "3":
 	            customerLeavesTheater();
@@ -78,9 +79,40 @@ public class Driver {
 	        System.out.println("    8. End the program.");
 	    }
 
+	    /*
+	     * Menu Option #1 - Check if MinHeap is Empty
+	     * 
+	     */
+	    public static void minHeapIsEmpty(){
+	    	if(minHeap.isEmpty()){
+	    		System.out.println("MinHeap is empty.");
+	    	}
+	    	else{
+	    		System.out.println("MinHeap is not empty.");
+	    	}
+	    	
+	    }
+	    
+	    /*
+	     * Menu Option #2 - Insert Key into MinHeap
+	     * 
+	     */
+	    public static void insertKey() throws IOException{
+
+	    	System.out.print("Input value to add into minheap: ");
+	    	int num = Integer.parseInt(reader.readLine());
+	    	minHeap.insert(num);
+
+	    	
+	    }
+	    
+	    
+	    
+	    
+	    
 	/*
 	 * This method sets up and initialized the job board
-	 */
+	 
 
 	public static void initialize(String[] args) {
 
@@ -118,5 +150,5 @@ public class Driver {
 			}
 
 		}
-
+*/
 }
