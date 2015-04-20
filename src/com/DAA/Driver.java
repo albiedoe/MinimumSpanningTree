@@ -8,11 +8,56 @@ public class Driver {
 
 	private static BufferedReader reader = new BufferedReader(
 			new InputStreamReader(System.in));
-	private static MinHeap minHeap = new MinHeap(10);
+	private static MinHeap minHeap;
+	private static MyListReferenceBased[] AL;
+	private static int numVertices;
 	
 	public static void main(String[] args) throws IOException{
-        //initialize(args);
+        initialize(args);
+        boolean minHeapDriver = true;
+        if(minHeapDriver){
+        	//MinHeapDriverCode
+        	runMeanHeapTesting();
 
+        }
+        else{
+        	//MST Solution
+        	runMSTSolution();
+        }
+	}
+
+	
+	/**
+	 * Runs the code for the MST Solution
+	 */
+	private static void runMSTSolution(){
+		
+		int parent[] = new int[numVertices];
+		boolean visited[] = new boolean[numVertices];
+		
+		//For every vertex -- update parent and visited
+		int i =0;
+		for(i = 0;i<numVertices;i++){
+			parent[i]=-1; 
+			visited[i]=false;
+		}
+		
+		//pull first vertex, make source, process AL
+		parent[0] = 0;
+		
+		int u = (int) minHeap.deleteMin();
+		while(u != -1){
+			visited[u] = true;
+			
+		}
+		
+		
+	}
+
+	/**
+	 * Runs the code to start the minHeapDriver 
+	 */
+	private static void runMeanHeapTesting() throws IOException{
         String choice = "";
         while (choice.equals("6") != true) {
             displayMenu();
@@ -20,7 +65,6 @@ public class Driver {
             System.out.println(choice);
             selectMenuItem(choice);
         }
-
 	}
 	  /**
 	    * checks which menu item is selected
@@ -73,7 +117,7 @@ public class Driver {
 	     * Menu Option #1 - Check if MinHeap is Empty
 	     * 
 	     */
-	    public static void minHeapIsEmpty(){
+	    private static void minHeapIsEmpty(){
 	    	if(minHeap.isEmpty()){
 	    		System.out.println("MinHeap is empty.");
 	    	}
@@ -87,7 +131,7 @@ public class Driver {
 	     * Menu Option #2 - Insert Key into MinHeap
 	     * 
 	     */
-	    public static void insertKey() throws IOException{
+	    private static void insertKey() throws IOException{
 
 	    	System.out.print("Input value to add into minheap: ");
 	    	int num = Integer.parseInt(reader.readLine());
@@ -105,9 +149,9 @@ public class Driver {
 	     * Menu Option #3 - Delete min key from MinHeap
 	     * 
 	     */
-	    public static void deleteMin() throws IOException{
+	    private static void deleteMin() throws IOException{
 
-	    	int num = (int) minHeap.DeleteMin();
+	    	int num = (int) minHeap.deleteMin();
 	    	System.out.println("Value "+num+" deleted from minheap.");    	
 	    }
 	    
@@ -116,7 +160,7 @@ public class Driver {
 	     * Menu Option #4 - Decrease key in MinHeap
 	     * 
 	     */
-	    public static void decreaseKey() throws IOException{
+	    private static void decreaseKey() throws IOException{
 
 	    	System.out.print("Input key to decrease in minHeap: ");
 	    	int key = Integer.parseInt(reader.readLine());
@@ -135,7 +179,7 @@ public class Driver {
 	     * Menu Option #5 - Display items in MinHeap in array order
 	     * 
 	     */
-	    public static void displayMinHeap() throws IOException{
+	    private static void displayMinHeap() throws IOException{
 
 	    	System.out.println("The MinHeap can viewed as in array order: ");
 	    	System.out.println(minHeap);	
@@ -144,43 +188,55 @@ public class Driver {
 	    	    
 	/*
 	 * This method sets up and initialized the job board
-	 
+	*/
 
-	public static void initialize(String[] args) {
+	    private static void initialize(String[] args) {
 
-		System.out.print("Please enter the number of People (n): ");
+		System.out.print("Please enter the number of Vertices (n): ");
 		System.out.println(args[0]);
-		numPeople = Integer.parseInt(args[0]);
-		board = new int[numPeople][numPeople];
-		bestCombo = new int[numPeople];
-		bestPossibleCombination = new int[numPeople];
-		
+		numVertices = Integer.parseInt(args[0]);
+		AL = new MyListReferenceBased[numVertices];
+	
+		int numEdges = Integer.parseInt(args[1]);
 		int i = 0;
-		int j = 0;
+			
+		minHeap = new MinHeap(numVertices);
+		//Initialize MinHeap
+		for(i=0; i<numVertices;i++){
+			minHeap.insert(Integer.MAX_VALUE);
+		}
+
+		
+	
+		//initialize linked lists in AL
+		for(i=0; i<numVertices;i++){
+			AL[i]=new MyListReferenceBased();
+		}
 
 		// Convert args to ints
 		int size = args.length;
 		int[] argsNums = new int[size - 1];
 		// start at 1 because first int specifies size
-		for (i = 1; i < size; i++) {
-			argsNums[i - 1] = Integer.parseInt(args[i]);
-			// System.out.println(argsNums[i-1]);
+		for (i = 2; i < size; i++) {
+			argsNums[i - 2] = Integer.parseInt(args[i]);
 		}
 
-		// Row Counter
-		for (i = 0; i < numPeople; i++) {
-
-			// Column Counter
-			for (j = 0; j < numPeople; j++) {
-				int num = argsNums[numPeople * i + j];
-				//Initializes board
-				board[i][j] = num;
-				//initializes bestPossibleCombination
-				if(bestPossibleCombination[i]<num){
-					bestPossibleCombination[i]=num;
-				}
-			}
+		//Set up AL
+		int from;
+		int to;
+		int weight;
+		for (i = 0; i < numEdges; i++) {
+			from = argsNums[i*3];
+			to = argsNums[i*3+1];
+			weight = argsNums[i*3+2];
+			AL[from].add(0, new Edge(to, weight));
+		
+		}
 
 		}
-*/
+	
+	private static void addToMST(int vertex){
+		
+	}
+
 }

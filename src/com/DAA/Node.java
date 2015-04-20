@@ -3,30 +3,27 @@ package com.DAA;
 
 public class Node
 {
-    private Object item;
+    private Edge edge;
     private Node next;
 
-    public Node(Object newItem)
+    public Node(Edge newEdge)
     {
-        item = newItem;
+        edge = newEdge;
         next = null;
     } // end constructor
 
-    public Node(Object newItem, Node nextNode)
+    public Node(Edge newEdge, Node nextNode)
     {
-        item = newItem;
+        edge = newEdge;
         next = nextNode;
     } // end constructor
 
-    public void setItem(Object newItem)
-    {
-        item = newItem;
-    } // end setItem
 
-    public Object getItem()
+    public Edge getEdge()
     {
-        return item;
+        return edge;
     } // end getItem
+    
 
     public void setNext(Node nextNode)
     {

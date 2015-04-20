@@ -46,7 +46,7 @@ public class MyListReferenceBased implements ListInterface
         {
 // get reference to node, then data in node
             Node curr = find(index);
-            Object dataItem = curr.getItem();
+            Object dataItem = curr.getEdge();
             return dataItem;
         }
         else
@@ -65,7 +65,7 @@ public class MyListReferenceBased implements ListInterface
             {
                 // insert the new node containing item at
                 // beginning of list
-                Node newNode = new Node(item, head);
+                Node newNode = new Node((Edge) item, head);
                 head = newNode;
             }
             else
@@ -73,7 +73,7 @@ public class MyListReferenceBased implements ListInterface
                 Node prev = find(index-1);
                 // insert the new node containing item after
                 // the node that prev references
-                Node newNode = new Node(item, prev.getNext());
+                Node newNode = new Node((Edge) item, prev.getNext());
                 prev.setNext(newNode);
             } // end if
 
@@ -138,7 +138,7 @@ public class MyListReferenceBased implements ListInterface
         Node n = head;
         while(n != null)
         {
-            contents = contents + n.getItem()+" ";
+            contents = contents + n.getEdge()+" ";
             n = n.getNext();
         }
         return contents;

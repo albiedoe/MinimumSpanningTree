@@ -9,7 +9,7 @@ public interface MinHeapInterface {
 	public boolean insert(Object item);
 	//inserts object in MinHeap and returns outcome
 
-	public Object DeleteMin();
+	public Object deleteMin();
 	//returns reference to object that has been removed 
 
 	public boolean decreaseKey(int vertex, int value);

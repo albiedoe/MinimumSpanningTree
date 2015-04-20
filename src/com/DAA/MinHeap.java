@@ -30,55 +30,70 @@ public class MinHeap implements MinHeapInterface {
 	}
 
 
-	public Object DeleteMin() throws EmptyMinHeapException{
+	public Object deleteMin() throws EmptyMinHeapException{
 		
-		//save first element to return later
-		int num = heap[0];
-		//move last element to first
-		heap[0] = heap[numItems-1];
-		//delete new last
-		numItems--;
-		
-		//trickle down new first guy
-		int index =0;
-		int swappingIndex=0;
-		while(swappingIndex != -1){
-			//first check if current index has children
-			if(2*index+2<numItems){
-				//Definitely doesnt have two children
-				if(2*index+1<numItems){
-					//has no children
-					swappingIndex=-1;
+		if(numItems>0){
+			//Find the vertex that points to spot 0 in the heap
+			int size = vertices.length;
+			int i =0;
+			int num=0;
+			while(i<size){
+				if(vertices[i]==0){
+					//we found the vertex with the min value
+					num = i;
 				}
-				else{
-					//has one child, compare to him to see if vertex needs to be 
-					//trickled
-					swappingIndex = 2*index +1;
-				}
+				i++;
 			}
-			else{
-				if(heap[2*index +1] < heap[2*index +2]){
-					swappingIndex = 2*index +1;
+			
+			//move last element to first
+			heap[0] = heap[numItems-1];
+			//delete new last
+			numItems--;
+			
+			//trickle down new first guy
+			int index =0;
+			int swappingIndex=0;
+			while(swappingIndex != -1){
+				//first check if current index has children
+				if(2*index+2<numItems){
+					//Definitely doesnt have two children
+					if(2*index+1<numItems){
+						//has no children
+						swappingIndex=-1;
+					}
+					else{
+						//has one child, compare to him to see if vertex needs to be 
+						//trickled
+						swappingIndex = 2*index +1;
+					}
 				}
 				else{
-					swappingIndex = 2*index+2;
+					if(heap[2*index +1] < heap[2*index +2]){
+						swappingIndex = 2*index +1;
+					}
+					else{
+						swappingIndex = 2*index+2;
+					}
 				}
+
+				if(swappingIndex!=-1){
+					if(heap[index]> heap[swappingIndex]){
+						//swap
+						swap(index, swappingIndex);
+					}
+					else{
+						//no more trickling to be done
+						swappingIndex = -1;
+					}
+				}
+
 			}
 
-			if(swappingIndex!=-1){
-				if(heap[index]> heap[swappingIndex]){
-					//swap
-					swap(index, swappingIndex);
-				}
-				else{
-					//no more trickling to be done
-					swappingIndex = -1;
-				}
-			}
-
+			return num;
 		}
-
-		return num;
+		else{
+			return -1;
+		}
 	}
 
 	
@@ -111,7 +126,7 @@ public class MinHeap implements MinHeapInterface {
 		return heap[vertices[vertex]];
 	}
 	/*
-	 * @return returns the array that depicts this minheap)
+	 * @return returns the array that depicts this minheap
 	 * 
 	 */
 	public String toString(){
