@@ -88,13 +88,13 @@ public class MinHeap implements MinHeapInterface {
 		//change value of distance, bubble up
 		int vertexsIndex = vertices[index];
 		heap[vertexsIndex] = value;
-
+		result = true;
 		//now bubble up
-		while(heap[vertexsIndex/2]<heap[vertexsIndex]){
+		while(heap[vertexsIndex/2]>heap[vertexsIndex]){
 				//swap them
 				swap(vertexsIndex/2, vertexsIndex);
 				vertexsIndex = vertexsIndex/2;
-				result = true;
+
 		}
 	
 		return result;
@@ -109,5 +109,16 @@ public class MinHeap implements MinHeapInterface {
 	
 	public int getValue(int vertex){
 		return heap[vertices[vertex]];
+	}
+	/*
+	 * @return returns the array that depicts this minheap)
+	 * 
+	 */
+	public String toString(){
+		String contents ="";
+		for(int i=0; i< numItems;i++){
+			contents = contents + heap[i]+ " ";
+		}
+		return contents;
 	}
 }

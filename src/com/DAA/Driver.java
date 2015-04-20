@@ -37,23 +37,16 @@ public class Driver {
 	            insertKey();
 	            break;
 	        case "3":
-	            customerLeavesTheater();
+	            deleteMin();
 	            break;
 	        case "4":
-	            displayTicketLines();
+	            decreaseKey();
 	            break;
 	        case "5":
-	            displayInterstellar();
+	            displayMinHeap();
 	            break;
 	        case "6":
-	            displayMaleficent();
-	            break;
-	        case "7":
-	            displayStats();
-	            break;
-	        case "8":
 	            System.out.println("Exiting program... Good Bye.");
-		    System.out.println("The Greco & Rynkiewicz Movie Theater who earned " + ((maleTicketsSold + interTicketsSold) * ticketPrice)+ " and kicks out the remaining customers and closes...");
 	            break;
 	        default:
 	            System.out.println("Please enter a correct menu option.");
@@ -65,18 +58,15 @@ public class Driver {
 	    */
 	    private static void displayMenu() {
 	        System.out.println("Select from the following menu:");
-	        System.out.println("    1. Customer(s) enter(s) movie theater.");
-	        System.out.println("    2. Customer buys ticket(s).");
-	        System.out.println("    3. Customer(s) leave(s) the theater.");
+	        System.out.println("    1. Check if MinHeap is empty.");
+	        System.out.println("    2. Insert key in MinHeap.");
+	        System.out.println("    3. Delete min key from MinHeap.");
 	        System.out
-	        .println("    4. Display info about customers waiting for tickets.");
+	        .println("    4. Decrease key in MinHeap.");
 	        System.out
-	        .println("    5. Display seating chart for Interstellar movie theater.");
+	        .println("    5. Display items in MinHeap in array order.");
 	        System.out
-	        .println("    6. Display seating chart for Malefcient movie theater.");
-	        System.out
-	        .println("    7. Display number of tickets sold and total earnings.");
-	        System.out.println("    8. End the program.");
+	        .println("    6. Exit Program.");
 	    }
 
 	    /*
@@ -101,15 +91,57 @@ public class Driver {
 
 	    	System.out.print("Input value to add into minheap: ");
 	    	int num = Integer.parseInt(reader.readLine());
-	    	minHeap.insert(num);
+	    	if(minHeap.insert(num)){
+	    		System.out.println("Item inserted successfully.");
+	    	}
+	    	else{
+	    		System.out.println("Item was not able to be inserted into minHeap.");
+	    	}
 
 	    	
 	    }
 	    
+	    /*
+	     * Menu Option #3 - Delete min key from MinHeap
+	     * 
+	     */
+	    public static void deleteMin() throws IOException{
+
+	    	int num = (int) minHeap.DeleteMin();
+	    	System.out.println("Value "+num+" deleted from minheap.");    	
+	    }
 	    
 	    
+	    /*
+	     * Menu Option #4 - Decrease key in MinHeap
+	     * 
+	     */
+	    public static void decreaseKey() throws IOException{
+
+	    	System.out.print("Input key to decrease in minHeap: ");
+	    	int key = Integer.parseInt(reader.readLine());
+	    	System.out.print("Input value to decrease given key: ");
+	    	int value = Integer.parseInt(reader.readLine());
+	    	
+	    	if(minHeap.decreaseKey(key, value)){
+	    		System.out.println("Item decreased successfully.");
+	    	}
+	    	else{
+	    		System.out.println("Item was not able to be decreased in minHeap.");
+	    	}	
+	    }
 	    
+	    /*
+	     * Menu Option #5 - Display items in MinHeap in array order
+	     * 
+	     */
+	    public static void displayMinHeap() throws IOException{
+
+	    	System.out.println("The MinHeap can viewed as in array order: ");
+	    	System.out.println(minHeap);	
+	    }	    
 	    
+	    	    
 	/*
 	 * This method sets up and initialized the job board
 	 
