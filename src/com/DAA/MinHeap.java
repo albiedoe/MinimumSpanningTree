@@ -37,16 +37,22 @@ public class MinHeap implements MinHeapInterface {
 			int size = vertices.length;
 			int i =0;
 			int num=0;
+			int lastIndex=0;
 			while(i<size){
 				if(vertices[i]==0){
 					//we found the vertex with the min value
 					num = i;
+
+				}
+				if(vertices[i]==numItems-1){
+					lastIndex=i;
 				}
 				i++;
 			}
 			
+			
 			//move last element to first
-			heap[0] = heap[numItems-1];
+			swapVerticesArray(num, lastIndex);
 			//delete new last
 			numItems--;
 			
@@ -119,7 +125,36 @@ public class MinHeap implements MinHeapInterface {
 		int temp = heap[index1];
 		heap[index1] = heap[index2];
 		heap[index2]= temp;
-		index1 = index2;
+	
+		
+		//Swap in Vertices as well
+		//First Find both in vertices array
+		int i =0;
+		int size = vertices.length;
+		int verticesIndex1=0;
+		int verticesIndex2=0;
+		
+		while(i<size){
+			if(vertices[i]==index1){
+				verticesIndex1 = i;
+			}
+			if(vertices[i]==index2){
+				verticesIndex2 = i;
+			}
+			i++;
+		}
+		//swap in vertices array
+		temp = vertices[verticesIndex1];
+		vertices[verticesIndex1] = vertices[verticesIndex2];
+		vertices[verticesIndex2]= temp;
+		
+	}
+	
+	private void swapVerticesArray(int index1, int index2){
+		int temp;
+		temp = vertices[index1];
+		vertices[index1] = vertices[index2];
+		vertices[index2]= temp;
 	}
 	
 	public int getValue(int vertex){

@@ -11,10 +11,13 @@ public class Driver {
 	private static MinHeap minHeap;
 	private static MyListReferenceBased[] AL;
 	private static int numVertices;
+	private static String MST="";
+	private static int parent[];
+	private static boolean visited[];
 	
 	public static void main(String[] args) throws IOException{
         initialize(args);
-        boolean minHeapDriver = true;
+        boolean minHeapDriver = false;
         if(minHeapDriver){
         	//MinHeapDriverCode
         	runMeanHeapTesting();
@@ -32,8 +35,7 @@ public class Driver {
 	 */
 	private static void runMSTSolution(){
 		
-		int parent[] = new int[numVertices];
-		boolean visited[] = new boolean[numVertices];
+
 		
 		//For every vertex -- update parent and visited
 		int i =0;
@@ -44,10 +46,12 @@ public class Driver {
 		
 		//pull first vertex, make source, process AL
 		parent[0] = 0;
-		
-		int u = (int) minHeap.deleteMin();
-		while(u != -1){
+		minHeap.decreaseKey(0, 0);
+
+		while(!minHeap.isEmpty()){
+			int u = (int) minHeap.deleteMin();
 			visited[u] = true;
+			addToMST(u,minHeap.getValue(u));
 			
 		}
 		
@@ -152,7 +156,7 @@ public class Driver {
 	    private static void deleteMin() throws IOException{
 
 	    	int num = (int) minHeap.deleteMin();
-	    	System.out.println("Value "+num+" deleted from minheap.");    	
+	    	System.out.println("Vertex "+num+" deleted from minheap.");    	
 	    }
 	    
 	    
@@ -196,7 +200,9 @@ public class Driver {
 		System.out.println(args[0]);
 		numVertices = Integer.parseInt(args[0]);
 		AL = new MyListReferenceBased[numVertices];
-	
+		parent = new int[numVertices];
+		visited= new boolean[numVertices];
+		
 		int numEdges = Integer.parseInt(args[1]);
 		int i = 0;
 			
@@ -235,8 +241,8 @@ public class Driver {
 
 		}
 	
-	private static void addToMST(int vertex){
-		
+	private static void addToMST(int vertex, int distance){
+		MST = MST + "\n "+vertex+" " +parent[vertex]+" "+distance;
 	}
 
 }
