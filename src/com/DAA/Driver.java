@@ -1,8 +1,20 @@
 package com.DAA;
+/*
+ * Purpose: Design and Analysis of Algorithms Assignment 4
+ * Status: Complete and thoroughly tested
+ * Last update: 04/21/15
+ * Submitted:  04/22/15
+ * Comment: 
+ * @author: Albert Rynkiewicz
+ * @version: 2015.04.21
+ */
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 
 public class Driver {
 
@@ -11,7 +23,7 @@ public class Driver {
 	private static MinHeap minHeap;
 	private static MyListReferenceBased[] AL;
 	private static int numVertices;
-	private static String MST="";
+	private static String MST="\nMST SOLUTION:";
 	private static int parent[];
 	private static boolean visited[];
 	
@@ -34,9 +46,6 @@ public class Driver {
 	 * Runs the code for the MST Solution
 	 */
 	private static void runMSTSolution(){
-		
-
-		
 		//For every vertex -- update parent and visited
 		int i =0;
 		for(i = 0;i<numVertices;i++){
@@ -49,11 +58,31 @@ public class Driver {
 		minHeap.decreaseKey(0, 0);
 
 		while(!minHeap.isEmpty()){
-			int u = (int) minHeap.deleteMin();
-			visited[u] = true;
-			addToMST(u,minHeap.getValue(u));
+			Vertex v = (Vertex) minHeap.deleteMin();
+			int parentId = v.getId();
+			visited[parentId] = true;
+			addToMST(parentId,v.getWeight());
+			
+			//now we need to process!
+			Node n = (Node) AL[parentId].get(0);
+			while(n != null){
+				
+				Edge e = n.getEdge();
+				int to = e.getId();
+				int weight = e.getWeight();
+				//This says "if the vertex at the end of this edge is not visited
+				//yet and the weight of the edge is less than the previous shortest
+				//edge...
+				if(visited[to]==false && weight < minHeap.getValue(to)){
+					parent[to]=parentId;//update parent
+					minHeap.decreaseKey(to, weight);//update minHeap accordingly.
+				}
+				
+				n=n.getNext();
+			}
 			
 		}
+		System.out.println(MST);
 		
 		
 	}
@@ -155,8 +184,8 @@ public class Driver {
 	     */
 	    private static void deleteMin() throws IOException{
 
-	    	int num = (int) minHeap.deleteMin();
-	    	System.out.println("Vertex "+num+" deleted from minheap.");    	
+	    	Vertex v = (Vertex) minHeap.deleteMin();
+	    	System.out.println("Vertex "+v.getId()+" with value "+v.getWeight()+" deleted from minheap.");    	
 	    }
 	    
 	    
@@ -195,6 +224,22 @@ public class Driver {
 	*/
 
 	    private static void initialize(String[] args) {
+	    	
+	    	//Input too large for string args to work in input 2. Read in from text file instead
+	    		args = new String[14852];//lines in text file
+	    		int q=0;
+	    	   try {
+	    		BufferedReader br = new BufferedReader(new FileReader("C:/Users/Albert/workspace/DAA_Assignment4/src/com/DAA/Input2.txt"));
+	   	        String line;
+	   	        while(q < 14852){
+	   	        	line = br.readLine();
+	   	        	args[q]= line;
+	   	        	q++;
+	   	        }
+	   	        
+	    	   } catch (Exception e) {
+	    	       e.printStackTrace();
+	    	   }
 
 		System.out.print("Please enter the number of Vertices (n): ");
 		System.out.println(args[0]);
@@ -207,10 +252,6 @@ public class Driver {
 		int i = 0;
 			
 		minHeap = new MinHeap(numVertices);
-		//Initialize MinHeap
-		for(i=0; i<numVertices;i++){
-			minHeap.insert(Integer.MAX_VALUE);
-		}
 
 		
 	
@@ -222,11 +263,11 @@ public class Driver {
 		// Convert args to ints
 		int size = args.length;
 		int[] argsNums = new int[size - 1];
-		// start at 1 because first int specifies size
+		// start at 2 because index 0 and 1 specifies size
 		for (i = 2; i < size; i++) {
 			argsNums[i - 2] = Integer.parseInt(args[i]);
 		}
-
+		System.out.println("INPUT:");
 		//Set up AL
 		int from;
 		int to;
@@ -236,13 +277,16 @@ public class Driver {
 			to = argsNums[i*3+1];
 			weight = argsNums[i*3+2];
 			AL[from].add(0, new Edge(to, weight));
-		
+			System.out.println(from+ " " +to+" "+weight);
+			//need to add opposite edge as well
+			AL[to].add(0, new Edge(from, weight));
+			// the 0 here works because we can always add the item to the beginning of the linked list.
 		}
 
 		}
 	
 	private static void addToMST(int vertex, int distance){
-		MST = MST + "\n "+vertex+" " +parent[vertex]+" "+distance;
+		MST = MST + "\n"+vertex+" " +parent[vertex]+" "+distance;
 	}
 
 }

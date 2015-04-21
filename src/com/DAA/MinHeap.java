@@ -2,15 +2,14 @@ package com.DAA;
 
 public class MinHeap implements MinHeapInterface {
 
-	private int[] heap;
-	private int[] vertices;
+	private Vertex[] vertexHeap;
 	private int numItems = 0;
 	
 	public MinHeap(int size){
-		heap = new int[size];
-		vertices = new int[size];
+		vertexHeap = new Vertex[size];
+		numItems = size;
 		for(int i = 0; i<size; i++){
-			vertices[i]=i;
+			vertexHeap[i]=new Vertex(i, Integer.MAX_VALUE);
 		}
 	}
 
@@ -24,7 +23,7 @@ public class MinHeap implements MinHeapInterface {
 	}
 
 	public boolean insert(Object item) {
-		heap[numItems++] = (int) item;
+		vertexHeap[numItems++] = (Vertex) item;
 
 		return true;
 	}
@@ -33,27 +32,13 @@ public class MinHeap implements MinHeapInterface {
 	public Object deleteMin() throws EmptyMinHeapException{
 		
 		if(numItems>0){
-			//Find the vertex that points to spot 0 in the heap
-			int size = vertices.length;
-			int i =0;
-			int num=0;
-			int lastIndex=0;
-			while(i<size){
-				if(vertices[i]==0){
-					//we found the vertex with the min value
-					num = i;
-
-				}
-				if(vertices[i]==numItems-1){
-					lastIndex=i;
-				}
-				i++;
-			}
-			
+			//Save deleted Vertex
+			Vertex v = vertexHeap[0];
 			
 			//move last element to first
-			swapVerticesArray(num, lastIndex);
+			swap(0, numItems-1);
 			//delete new last
+			vertexHeap[numItems-1]=null;
 			numItems--;
 			
 			//trickle down new first guy
@@ -61,9 +46,9 @@ public class MinHeap implements MinHeapInterface {
 			int swappingIndex=0;
 			while(swappingIndex != -1){
 				//first check if current index has children
-				if(2*index+2<numItems){
+				if(vertexHeap[2*index+2]==null){
 					//Definitely doesnt have two children
-					if(2*index+1<numItems){
+					if(vertexHeap[2*index+1]==null){
 						//has no children
 						swappingIndex=-1;
 					}
@@ -74,7 +59,7 @@ public class MinHeap implements MinHeapInterface {
 					}
 				}
 				else{
-					if(heap[2*index +1] < heap[2*index +2]){
+					if(vertexHeap[2*index +1].getWeight() < vertexHeap[2*index +2].getWeight()){
 						swappingIndex = 2*index +1;
 					}
 					else{
@@ -83,7 +68,7 @@ public class MinHeap implements MinHeapInterface {
 				}
 
 				if(swappingIndex!=-1){
-					if(heap[index]> heap[swappingIndex]){
+					if(vertexHeap[index].getWeight()> vertexHeap[swappingIndex].getWeight()){
 						//swap
 						swap(index, swappingIndex);
 					}
@@ -95,7 +80,7 @@ public class MinHeap implements MinHeapInterface {
 
 			}
 
-			return num;
+			return v;
 		}
 		else{
 			return -1;
@@ -106,15 +91,24 @@ public class MinHeap implements MinHeapInterface {
 	public boolean decreaseKey(int index, int value) {
 
 		boolean result = false;
-		//change value of distance, bubble up
-		int vertexsIndex = vertices[index];
-		heap[vertexsIndex] = value;
-		result = true;
-		//now bubble up
-		while(heap[vertexsIndex/2]>heap[vertexsIndex]){
+		
+		//Find correct Vertex
+		int i;
+		for(i=0; i< numItems; i++){
+			if(vertexHeap[i].getId()==index){
+				//we found our vertex, lets change the weight
+				vertexHeap[i].setWeight(value);
+				result = true;
+				break;//no need to continue
+			}
+		}
+		
+
+		//now we need to bubble up
+		while(vertexHeap[i/2].getWeight()>vertexHeap[i].getWeight()){
 				//swap them
-				swap(vertexsIndex/2, vertexsIndex);
-				vertexsIndex = vertexsIndex/2;
+				swap(i/2, i);
+				i = i/2;
 
 		}
 	
@@ -122,43 +116,22 @@ public class MinHeap implements MinHeapInterface {
 	}
 
 	private void swap(int index1, int index2){
-		int temp = heap[index1];
-		heap[index1] = heap[index2];
-		heap[index2]= temp;
+		Vertex temp = vertexHeap[index1];
+		vertexHeap[index1] = vertexHeap[index2];
+		vertexHeap[index2]= temp;
 	
-		
-		//Swap in Vertices as well
-		//First Find both in vertices array
-		int i =0;
-		int size = vertices.length;
-		int verticesIndex1=0;
-		int verticesIndex2=0;
-		
-		while(i<size){
-			if(vertices[i]==index1){
-				verticesIndex1 = i;
-			}
-			if(vertices[i]==index2){
-				verticesIndex2 = i;
-			}
-			i++;
-		}
-		//swap in vertices array
-		temp = vertices[verticesIndex1];
-		vertices[verticesIndex1] = vertices[verticesIndex2];
-		vertices[verticesIndex2]= temp;
+	
 		
 	}
-	
-	private void swapVerticesArray(int index1, int index2){
-		int temp;
-		temp = vertices[index1];
-		vertices[index1] = vertices[index2];
-		vertices[index2]= temp;
-	}
-	
+
 	public int getValue(int vertex){
-		return heap[vertices[vertex]];
+		
+		for(int i=0;i<numItems;i++){
+			if(vertexHeap[i].getId()==vertex){
+				return vertexHeap[i].getWeight();
+			}
+		}
+		return -1;
 	}
 	/*
 	 * @return returns the array that depicts this minheap
@@ -167,7 +140,7 @@ public class MinHeap implements MinHeapInterface {
 	public String toString(){
 		String contents ="";
 		for(int i=0; i< numItems;i++){
-			contents = contents + heap[i]+ " ";
+			contents = contents + vertexHeap[i].getWeight()+ " ";
 		}
 		return contents;
 	}

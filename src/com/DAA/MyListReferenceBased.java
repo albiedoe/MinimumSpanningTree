@@ -47,7 +47,7 @@ public class MyListReferenceBased implements ListInterface
 // get reference to node, then data in node
             Node curr = find(index);
             Object dataItem = curr.getEdge();
-            return dataItem;
+            return curr;
         }
         else
         {

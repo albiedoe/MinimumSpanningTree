@@ -1,7 +1,7 @@
 package com.DAA;
 
 /*
- * This class represents a Vertex in a Graph used for finding a Minimum
+ * This class represents an Edge in a Graph used for finding a Minimum
  * Spanning Tree
  */
 public class Edge {
@@ -18,7 +18,7 @@ public class Edge {
 		return to;
 	}
 
-	public int getDistance(){
+	public int getWeight(){
 		return weight;
 	}
 	
